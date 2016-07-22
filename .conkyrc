@@ -1,0 +1,57 @@
+background no
+out_to_console yes
+out_to_x no
+max_text_width 0
+own_window no
+update_interval 60
+total_run_times 0
+short_units yes
+if_up_strictness address
+use_spacer right
+override_utf8_locale no
+cpu_avg_samples 2
+TEXT
+,[
+#Title
+#{"full_text":" ${exec wismysys title -i}","color":"${exec wismysys title -c}","separator":false,"separator_block_width":5},\
+#{"full_text":"${exec wismysys title -v} ","color":"\#ffffff","separator":false,"separator_block_width":15},\
+#Weather
+{"full_text":" ${exec wismysys weather -i}","color":"${exec wismysys weather -c}","separator":false,"separator_block_width":5},\
+{"full_text":"${exec wismysys weather -v} ","color":"\#ffffff","separator":false,"separator_block_width":15},\
+#Pacman
+#{"full_text":" ","color":"\#AEB404","separator":false,"separator_block_width":15},\
+#{"full_text":"${execi 200 checkupdates | wc -l}","color":"\#ffffff","separator":false,"separator_block_width":15},\
+#AUR
+#{"full_text":" ${exec wismysys aur -i}","color":"${exec wismysys aur -c}","separator":false,"separator_block_width":5},\
+#{"full_text":"${exec wismysys aur -v}","color":"\#ffffff","separator":false,"separator_block_width":15},\
+#Kernel
+#{"full_text":" ","color":"\#FF4000","separator":false,"separator_block_width":15},\
+#{"full_text":"${kernel}","color":"\#ffffff","separator":false,"separator_block_width":15},\
+#{ "full_text": ": ${kernel}","color":"\#FF4000"},
+#Wifi
+#{"full_text":" ${exec wismysys wireless -i}","color":"${exec wismysys wireless -c}","separator":false,"separator_block_width":5},\
+#{"full_text":"${exec wismysys wireless -v}","color":"\#ffffff","separator":false,"separator_block_width":15},\
+#{"full_text": ": [${upspeed wlp2s0}] ", "color":"\#00FF00", "separator": false, "separator_block_width":15},\
+
+#Finds current volume. May need modified depending on your setup
+#{"full_text":" ${exec wismysys sound -i}","color":"${exec wismysys sound -c}","separator":false,"separator_block_width":5},\
+#{"full_text": " ${exec wismysys sound -v} ", "color":"\#ffffff", "separator":false, "separator_block_width":15},\
+#Brightness
+#{"full_text":" ","color":"\#F7FE2E","separator":false,"separator_block_width":15},\
+#{"full_text":"[${exec xbacklight| awk '{printf("%d\n",$1 + 0.5)}'}%] ","color":"\#ffffff","separator":false,"separator_block_width":15},\
+#{ "full_text": ": ${exec xbacklight| awk '{printf("%d\n",$1 + 0.5)}'}% ", "color":"\#F7FE2E"},
+#CPU
+#{"full_text":" ","color":"\#8D00FF","separator":false,"separator_block_width":15},\
+#{"full_text":"$cpu%","color":"\#ffffff","separator":false,"separator_block_width":15},\
+#{"full_text": " :$cpu% ", "color":"\#8D00FF", "separator": false, "separator_block_width":15},\
+#Battery 
+#{"full_text":" ","color":"\#FF0000","separator":false,"separator_block_width":15},\
+#{"full_text":"${battery_percent BAT1}%","color":"\#ffffff","separator":false,"separator_block_width":15},\
+#{"full_text": ":[${battery_percent BAT1}%] ","color":"\#dedede"},
+##Calender/time
+{"full_text":"${exec wismysys date -i}","color":"${exec wismysys date -c}","separator":false,"separator_block_width":6},\
+{"full_text":"${time %a %Y-%m-%d}","color":"\#ffffff","separator":false},\
+#{"full_text": " :${time %a %d %b} ${time %H:%M:%S} ","color": "\#2E9AFE", "separator": false},
+{"full_text":"${exec wismysys time -i}","color":"${exec wismysys time -c}","separator":false,"separator_block_width":6},\
+{"full_text":"${time %H:%M} ","color":"\#ffffff","separator":false}
+]
