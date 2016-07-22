@@ -1,0 +1,219 @@
+#!/bin/python
+
+# WIsMySys - What Is My System?
+
+import subprocess
+import sys
+import psutil
+
+theme_icon_color = '#5294e2'
+#theme_icon_color = '#ffa500'
+
+def get_cmd_result(cmd):
+    return subprocess.Popen(cmd, shell=True, stdout = subprocess.PIPE).stdout.read().decode('utf-8') 
+
+op1list = ['cpu', 'sound', 'aur', 'kernel', 'date', 'time', 'times', 'wireless', 'ethernet', 'title', 'brightness', 'battery', 'weather']
+op2list = ['--icon', '--value', '--color', '-i', '-v', '-c']
+
+if len(sys.argv) != 3 or sys.argv[1] not in op1list or sys.argv[2] not in op2list:
+    print('Error - wrong syntax!')
+    print('Syntax: wismysys [' + '|'.join(op1list) + '] [' + '|'.join(op2list) + ']')
+else:
+    op1 = sys.argv[1]
+    op2 = sys.argv[2]
+    result = ''
+
+    if op1 == 'cpu':
+        if op2 == '--value' or op2 == '-v':
+            value = psutil.cpu_percent(1)
+            result = round(value)
+        elif op2 == '--color' or op2 == '-c':
+            result = theme_icon_color
+        else:
+            result = ''
+    elif op1 == 'sound':
+        cmd = 'amixer get Master | grep "\[on\]"'
+        values = get_cmd_result(cmd).split('\n')[:-1]
+        
+        is_muted = False
+
+        if len(values) > 0:
+            value = values[0].split(' ')
+            # print("Test:", value)
+            # Test: ['', '', 'Mono:', 'Playback', '55', '[63%]', '[-24.00dB]', '[on]']
+            if value[2] == 'Mono:':
+                value = int(values[0].split(' ')[5][1:-2])
+            else:
+                value = int(values[0].split(' ')[6][1:-2])
+            result = value
+        else:
+            is_muted = True
+            value = 0
+        if op2 == '--value' or op2 == '-v':
+            if is_muted:
+                result = ''
+            else:
+                result = value
+        elif op2 == '--color' or op2 == '-c':
+            if is_muted:
+                result = '#cccccc'
+            else:
+                result = theme_icon_color
+        else:
+            if is_muted or value < 15:
+                result = ''
+            elif value < 60:
+                result = ''
+            else:
+                result = ''
+    elif op1 == 'aur': 
+        cmd = 'yaourt -Sup | grep "http://.*"'
+        value = get_cmd_result(cmd)
+        val_list = value.split('\n')
+        val_list = [x for x in val_list if len(x) > 0]
+
+        if op2 == '--value' or op2 == '-v':
+            result = len(val_list)
+        elif op2 == '--color' or op2 == '-c':
+            if len(val_list) > 0:
+                result = '#ff0000'
+            else:
+                result = theme_icon_color
+        else:
+            result = ''
+    elif op1 == 'kernel':
+        cmd = 'uname -r'
+        value = get_cmd_result(cmd)
+
+        if op2 == '--value' or op2 == '-v':
+            result = value
+        elif op2 == '--color' or op2 == '-c':
+            result = theme_icon_color
+        else:
+            result = ''
+    elif op1 == 'date':
+        cmd = 'date \'+%a %d.%m.%y\''
+        value = get_cmd_result(cmd)
+
+        if op2 == '--value' or op2 == '-v':
+            result = value
+        elif op2 == '--color' or op2 == '-c':
+            result = theme_icon_color
+        else:
+            result = ''
+    elif op1 == 'time' or op1 == 'times':
+        if op1 == 'time':
+            cmd = 'date \'+%H:%M\''
+        else:
+            cmd = 'date \'+%H:%M:%S\''
+        value = get_cmd_result(cmd)
+
+        if op2 == '--value' or op2 == '-v':
+            result = value
+        elif op2 == '--color' or op2 == '-c':
+            result = theme_icon_color
+        else:
+            result = ''
+    elif op1 == 'wireless':
+        interface = 'wlp0s20u6'
+        cmd = 'vnstat -i ' + interface + ' -tr 5 | grep "rx\\|tx"'
+        value = get_cmd_result(cmd)
+
+        value = value.split(' ')
+
+
+        value = [x for x in value if len(x) > 0]
+        value[2] = value[2][0:1].upper()
+        value[7] = value[2][0:1].upper()
+        value = '' + str(round(float(value[1]))) + ' ' + value[2] + ' ' + str(round(float(value[6]))) + ' ' + value[7]
+
+        if op2 == '--value' or op2 == '-v':
+            result = value
+        elif op2 == '--color' or op2 == '-c':
+            result = theme_icon_color
+        else:
+            result = ''
+    elif op1 == 'ethernet':
+        interface = 'enp3s0'
+        cmd = 'vnstat -i ' + interface + ' -tr 5 | grep "rx\\|tx"'
+        value = get_cmd_result(cmd)
+
+        value = value.split(' ')
+
+
+        value = [x for x in value if len(x) > 0]
+        value[2] = value[2][0:1].upper()
+        value[7] = value[2][0:1].upper()
+        value = '' + str(round(float(value[1]))) + ' ' + value[2] + ' ' + str(round(float(value[6]))) + ' ' + value[7]
+
+        if op2 == '--value' or op2 == '-v':
+            result = value
+        elif op2 == '--color' or op2 == '-c':
+            result = theme_icon_color
+        else:
+            result = ''
+    elif op1 == 'title':
+        cmd = 'xprop -id $(xprop -root | awk \'/_NET_ACTIVE_WINDOW\(WINDOW\)/{print $NF}\') | grep "_NET_WM_NAME(UTF8_STRING)"'
+        value = get_cmd_result(cmd)
+        values = value.split(' ')
+        
+        max_len = 50
+
+        if op2 == '--value' or op2 == '-v':
+            result = ' '.join(values[2:])[1:-2]
+            if len(result) > max_len:
+                result = '...' + result[-max_len:]
+        elif op2 == '--color' or op2 == '-c':
+            result = theme_icon_color
+        else:
+            result = ''
+   # TODO
+   # elif op1 == 'brightness':
+   #     cmd = ''
+   #     value = get_cmd_result(cmd)
+   #     values = value.split(' ')
+   #     
+   #     if op2 == '--value' or op2 == '-v':
+   #         result = ' '.join(values[2:])[1:-2]
+   #     else:
+   #         result = ''
+   # TODO
+   # elif op1 == 'battery':
+   #     cmd = ''
+   #     value = get_cmd_result(cmd)
+   #     values = value.split(' ')
+   #     
+   #     if op2 == '--value' or op2 == '-v':
+   #         result = ' '.join(values[2:])[1:-2]
+   #     else:
+   #         result = ''
+    elif op1 == 'weather':
+        location = 'Bydgoszcz,PL'
+        cmd = 'ansiweather -l ' + location
+        value = get_cmd_result(cmd)
+        if len(value) > 0:
+            values = value.split('=>')[1].split(' ')
+
+            del(values[0])
+            for i in range(3):
+                del(values[-1])
+
+            if op2 == '--value' or op2 == '-v':
+                # result = values[0] + ' ' + values[1]
+                result = values[3] + ', ' + values[0] + ' ' + values[1]
+            elif op2 == '--color' or op2 == '-c':
+                result = theme_icon_color
+            else:
+                result = values[2]
+        else:
+            result = 'n/d'
+    else:
+        result = '#ERR'
+
+    print(result)
+
+#cmd = 'amixer -c 0 get Master | grep Mono: | cut -d " " -f6'
+#output = subprocess.Popen(cmd, shell=True, stdout = subprocess.PIPE).stdout.read()
+#output = output.decode('utf-8')
+
+#print(output[1:-3])
