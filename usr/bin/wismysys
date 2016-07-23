@@ -200,11 +200,13 @@ else:
 
             if op2 == '--value' or op2 == '-v':
                 # result = values[0] + ' ' + values[1]
-                result = values[3] + ', ' + values[0] + ' ' + values[1]
+                # result = values[3] + ', ' + values[0] + ' ' + values[1]
+                result = values[0] + ' ' + values[1]
             elif op2 == '--color' or op2 == '-c':
                 result = theme_icon_color
             else:
-                result = values[2]
+                #result = values[2]
+                result = ''
         else:
             result = 'n/d'
     else:
