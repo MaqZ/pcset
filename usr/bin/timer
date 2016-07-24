@@ -1,0 +1,21 @@
+#!/usr/bin/python
+
+import time, math
+
+start = time.time()
+
+eltime = ""
+try:
+    while True:
+        seconds = round(time.time() - start)
+        minutes = math.floor(seconds / 60)
+        seconds %= 60
+
+        eltime = str(minutes) + ":"
+        if seconds < 10:
+            eltime += "0"
+        eltime += str(seconds)
+        
+        print("Elapsed time: " + eltime + " s", end='\r')
+except KeyboardInterrupt:
+    print("\nElapsed time: " + eltime + " s")
