@@ -232,7 +232,6 @@ bar {
   # mode invisible
   font xft:Fira Sans Medium, FontAwesome 13px
 
-
   colors {
 		background $bg-color
 	 	separator #757575
@@ -255,16 +254,19 @@ exec redshift
 exec pamac-tray
 exec volumeicon
 exec nm-applet
-#exec tp-battery-icon
+exec tp-battery-icon
 
 bindsym $mod+Shift+x exec i3lock-fancy -g
-bindsym Print exec scrot -e 'mv $f /run/media/Magazyn/General/Obrazy/Screenshots/$f'
+bindsym $mod+Shift+Print exec scrot -e 'mv $f /run/media/Magazyn/General/Obrazy/Screenshots/$f'
 
 exec --no-startup-id nitrogen --restore
 
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+ unmute
 bindsym XF86AudioLowerVolume exec amixer -q set Master 5%- unmute
 bindsym XF86AudioMute exec amixer -q set Master toggle
+
+bindsym XF86MonBrightnessUp exec xbrightness +5000
+bindsym XF86MonBrightnessDown exec xbrightness -5000
 
 # bindsym XF86AudioPlay exec cmus-remote -u
 # bindsym XF86AudioNext exec cmus-remote -n
@@ -275,8 +277,10 @@ bindsym XF86AudioStop exec clementine --stop
 bindsym XF86AudioPrev exec clementine --previous
 bindsym XF86AudioNext exec clementine --next
 
-bindsym $mod+d exec rofi -show run -width 100 -lines 3 -font 'Fira Sans Medium 30' -padding 450 -config '/home/maqzee/.Xdefaults' -opacity 75
+# bindsym $mod+d exec dmenu_run
+bindsym $mod+d exec rofi -show run -width 100 -lines 3 -font 'Fira Sans Medium 30' -padding 276 -config '/home/maqzee/.Xdefaults' -opacity 75
 bindsym $mod+Shift+b exec firefox
 bindsym $mod+Shift+f exec thunar
 # bindsym $mod+Shift+m exec urxvt -hold -e 'cmus'
 bindsym $mod+Shift+m exec clementine
+bindsym Print exec imgur-screenshot
