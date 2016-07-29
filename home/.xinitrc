@@ -1,6 +1,7 @@
-exec i3
+xset r rate 200 30
 # exec bspwm
-
+setxkbmap pl
+export GNOME_DESKTOP_SESSION_ID=1
 
 # Start the window manager:
 if [ -z "$DESKTOP_SESSION" -a -x /usr/bin/ck-launch-session ]; then
@@ -9,4 +10,4 @@ else
   exec /usr/bin/i3
 fi
 
-xset r rate 200 30
+#exec i3
