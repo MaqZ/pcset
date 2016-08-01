@@ -18,4 +18,5 @@ try:
         
         print("Elapsed time: " + eltime + " s", end='\r')
 except KeyboardInterrupt:
+    print('\r\r')
     print("\nElapsed time: " + eltime + " s")

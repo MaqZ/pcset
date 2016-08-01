@@ -11,6 +11,19 @@ set backspace=indent,eol,start
 set path=$PWD/**
 set hidden
 set ruler
+set mouse=a
+set hlsearch
+set incsearch
+map <F2> :w!<CR>
+
+nnoremap th  :tabfirst<CR>
+nnoremap tj  :tabnext<CR>
+nnoremap tk  :tabprev<CR>
+nnoremap tl  :tablast<CR>
+nnoremap tt  :tabedit<Space>
+nnoremap tn  :tabnext<Space>
+nnoremap tm  :tabm<Space>
+nnoremap td  :tabclose<CR>
 
 let $PYTHONPATH='/usr/lib/python3.4/site-packages'
 " set g:powerline_pycmd to "py3"
@@ -24,10 +37,12 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
-Plugin 'L9'
+" Plugin 'L9'
 Plugin 'git://git.wincent.com/command-t.git'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'ascenator/L9', {'name': 'newL9'}
+Plugin 'xolox/vim-session'
+Plugin 'xolox/vim-misc'
 " Plugin 'vim-airline/vim-airline'
 " Plugin 'vim-airline/vim-airline-themes'
 " Plugin 'scrooloose/nerdtree'
@@ -68,6 +83,8 @@ set laststatus=2
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " map <C-n> :NERDTreeToggle<CR>
+
+""" neocomplcache
 let g:neocomplcache_enable_at_startup = 1
 "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
